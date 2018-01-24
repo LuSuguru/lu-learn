@@ -12,167 +12,85 @@
       padding: 0;
     }
 
-    .box-right {
-
-      overflow: hidden;
-      height: 200px;
-      background: yellow;
-    }
-
     .box {
-      float: left;
-      margin: 0 auto;
-      margin-right: 200px;
       height: 200px;
-      padding-right: 20px;
-      border: 1px solid yellow;
-      background: #ff0000;
-      font-size: 80px;
-      overflow-y: auto;
+      /* overflow: hidden; */
     }
 
-    .box-son {
+    .middle {
+      width: 100%;
+      height: 200px;
+      background-color: deeppink;
+      float: left;
+    }
+
+    .main {
+      margin-left: 200px;
+      margin-right: 200px;
+    }
+
+    .left {
       width: 200px;
-      height: 600px;
-      border: 1px solid #ff0000;
-      overflow-y: auto;
+      height: 200px;
+      background-color: blue;
+      float: left;
+      margin-left: -100%;
     }
 
-    .box-son-son {
+    .right {
       width: 200px;
-      height: 800px;
-      border: 1px solid #000000;
+      height: 200px;
+      background-color: darkorchid;
+      float: left;
+      margin-left: -200px;
     }
 
-    .box-father {
-      overflow: hidden;
+    ul {
+      float: left
+    }
+
+    li {
+      width: 100px;
+      display: inline-block;
     }
   </style>
 </head>
 
 <body>
-  <div class="box-father">
-    <div class="box">
-      <div class="box-son">
-        <div class="box-son-son">asdasd</div>
+  <div class="box">
+    <div class="middle">
+      <div class="main">
+        <ul>
+          <li>测试</li>
+          <li>测试</li>
+          <li>测试</li>
+          <li>测试</li>
+          <li>测试</li>
+          <li>测试</li>
+          <li>测试</li>
+        </ul>
       </div>
     </div>
-    <div class="box-right"></div>
+    <div class="left"></div>
+    <div class="right"></div>
   </div>
+  <script src="./timeline/tween.js" type="module"></script>
+  <script src="./timeline/core.js" type="module"></script>
   <script>
-    //编写一个javscript函数 fn，该函数有一个参数 n（数字类型），其返回值是一个数组，该数组内是 n 个随机且不重复的整数，且整数取值范围是 [2, 32]。
-    function change(n) {
-      var arr = []
-      var i = 0
-
-      //生成一个随机数
-      var getNum = function () {
-        return Math.floor(Math.random() * 31 + 2)
-      }
-
-      //检查是否重复
-      var checkout = function (arr, num) {
-        for (var j = 0; j < arr.length; j++) {
-          if (arr[j] === num) return false
-        }
-        return true
-      }
-
-      while (i < n) {
-        var num = getNum()
-        if (checkout(arr, num)) {
-          arr.push(num)
-          i++
-        }
-      }
-
-      return arr.sort()
-    }
-
-    /**
-    *获取 url 中的参数
-    1. 指定参数名称，返回该参数的值 或者 空字符串
-    2. 不指定参数名称，返回全部的参数对象 或者 {}
-    3. 如果存在多个同名参数，则返回数组
-    */
-
-    //时间转换
-    function count(str) {
-      var strObj = {};
-      str.replace(/\S/, function (match) {
-        console.log(match)
-        if (match in strObj) {
-          strObj[match]++;
-        } else {
-          strObj[match] = 1;
-        }
-      });
-      return strObj;
-    }
-
-    function Node2(node) {
-      this.node = node
-    }
-
-    Node2.prototype.getSiblings = function () {
-      var allChild = this.node.parentNode.children
-      var childObj = {
-        length: 0
-      }
-      for (let i = 0; i < allChild.length; i++) {
-        if (allChild[i] !== this.node) {
-          childObj[childObj.length] = allChild[i]
-          childObj.length += 1
-        }
-      }
-      return childObj
-    }
-
-    Node2.prototype.addClass = function () {
-      for (var key in classes) {
-        var value = classes[key]
-        var methodName = value ? 'add' : 'remove'
-        this.node.classList[methodName](key) //闭包的使用
-      }
-    }
-
-    Node2.from = function () {
-      console.log(1)
-    }
-
-    var Node3 = function (node) {
-      return {
-        getSiblings: function () {
-          var allChild = node.parentNode.children
-          var childObj = {
-            length: 0
-          }
-          for (let i = 0; i < allChild.length; i++) {
-            if (allChild[i] !== node) {
-              childObj[childObj.length] = allChild[i]
-              childObj.length += 1
-            }
-          }
-          return childObj
-        },
-
-        addClass: function (classes) {
-          for (var key in classes) {
-            var value = classes[key]
-            var methodName = value ? 'add' : 'remove'
-            node.classList[methodName](key) //闭包的使用
-          }
-        }
-      }
-    }
-
-    window.onload = function () {
-      var node = document.getElementsByClassName('box')
-      var div = new Node2(node[0])
-      console.log(Node3(node[0]).getSiblings())
-      console.log(div.getSiblings())
-      console.log(Node2.from())
-    }
+    import Timeline from './timeline/core.js'
+    const box = document.querySelector('#box')
+    const timeline = new Timeline({
+      duration: 3000,
+      value: [
+        [0, 400],
+        [0, 600]
+      ],
+      render: function (value1, value2) {
+        box.style.transform = `translate(${ value1 }px, ${ value2 }px)`;
+      },
+      timingFunction: 'easeOut',
+    })
+    timeline.play();
   </script>
   </div>
 </body>
