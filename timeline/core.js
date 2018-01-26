@@ -1,66 +1,48 @@
-import Tween from './tween'
+function Core(opt) {
+  this.state = 'init'
 
-class Core {
-  constructor(opt) {
-    this._init(opt)
-    this.state = 'init'
-  }
+  this.duration = opt.duration || 1000
+  this.timingFunction = opt.timingFunction || 'linear'
+  this.renderFunction = opt.render || this._defaultFunc
 
-  _init(opt) {
-    this._initValue(opt.value)
-    // 保存动画总时长，缓动函数以及渲染函数
-    this.duration = opt.duration || 1000
-    this.timingFunction = opt.timingFunction || 'linear'
-    this.renderFunction = opt.render || this._defaultFunc
+  this.onPlay = opt.onPlay
+  this.onEnd = opt.onEnd
+  this.onStop = opt.onStop
+  this.onReset = opt.onReset
 
-    // 未来会用到的事件函数
-    this.onPlay = opt.onPlay
-    this.onEnd = opt.onEnd
-    this.onStop = opt.onStop
-    this.onReset = opt.onReset
-  }
-
-  _initValue(value) {
-    // 初始化运动值
-    this.value = []
-    value.forEach(item => {
-      this.value.push({
-        start: parseFloat(item[0]),
-        end: parseFloat(item[1])
-      })
+  this.value = []
+  opt.value.forEach(item => {
+    this.value.push({
+      start: parseFloat(item[0]),
+      end: parseFloat(item[1])
     })
-  }
+  })
+}
 
-  _loop() {
-    const t = Date.now() - this.beginTime,
-      d = this.duration,
-      func = Tween[this.timingFunction] || Tween['linear']
+Core.prototype._loop = function () {
 
-    if (t >= d) {
-      this.state = 'end'
-      this._renderFunction(t, d, func)
-    } else {
-      this._renderFunction(t, d, func)
-      window.requestAnimationFrame(this._loop.bind(this))
-    }
-  }
+  const t = Date.now() - this.beginTime,
+    d = this.duration,
+    func = Tween[this.timingFunction || Tween['linear']]
 
-  _renderFunction(t, d, func) {
-    const values = this.value.map(value => func(t, value, value.end - value.start, d))
-    this.renderFunction.apply(this, values)
-  }
-
-  _play() {
-    this.state = 'play'
-    this.beginTime = Date.now()
-    // 执行动画循环
-    const loop = this._loop.bind(this)
-    window.requestAnimationFrame(loop)
-  }
-
-  play() {
-    this._play()
+  if (t >= d) {
+    this.state = 'end'
+    this._renderFunction(t, d, func)
+  } else {
+    this._renderFunction(t, d, func)
+    window.requestAnimationFrame(this._loop.bind(this))
   }
 }
 
-export default Core
+Core.prototype._renderFunction = function (t, d, func) {
+  const values = this.value.map(value => func(t, value.start, value.end - value.start, d))
+  this.renderFunction.apply(this, values)
+}
+
+Core.prototype.play = function () {
+  this.state = 'play'
+  this.beginTime = Date.now()
+
+  const loop = this._loop.bind(this)
+  window.requestAnimationFrame(loop)
+}

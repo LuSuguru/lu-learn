@@ -12,8 +12,9 @@
       padding: 0;
     }
 
-    .box {
+    #box {
       height: 200px;
+      background: yellow;
       /* overflow: hidden; */
     }
 
@@ -57,7 +58,7 @@
 </head>
 
 <body>
-  <div class="box">
+  <div id="box">
     <div class="middle">
       <div class="main">
         <ul>
@@ -74,23 +75,39 @@
     <div class="left"></div>
     <div class="right"></div>
   </div>
-  <script src="./timeline/tween.js" type="module"></script>
-  <script src="./timeline/core.js" type="module"></script>
+  <script src="./timeline/tween.js"></script>
+  <script src="./timeline/core.js"></script>
+  <script src="./promise.js"></script>
   <script>
-    import Timeline from './timeline/core.js'
-    const box = document.querySelector('#box')
-    const timeline = new Timeline({
-      duration: 3000,
-      value: [
-        [0, 400],
-        [0, 600]
-      ],
-      render: function (value1, value2) {
-        box.style.transform = `translate(${ value1 }px, ${ value2 }px)`;
-      },
-      timingFunction: 'easeOut',
+    // const box = document.querySelector('#box')
+    // const timeline = new Core({
+    //   duration: 3000,
+    //   value: [
+    //     [0, 400],
+    //     [0, 600]
+    //   ],
+    //   render: function (value1, value2) {
+    //     box.style.transform = `translate(${ value1 }px, ${ value2 }px)`;
+    //   },
+    //   // timingFunction: 'easeOut',
+    // })
+    // timeline.play()
+    // console.log(Promise1)
+    new Promise1(resolve => {
+      setTimeout(() => {
+        resolve('测试')
+      }, 1000)
+    }).then(res => {
+      return new Promise1(resolve => {
+        setTimeout(() => {
+          console.log('测试‘then1')
+          resolve('测试then1')
+        }, 1000)
+      })
+    }).then(res => {
+      console.log(res)
+      console.log('测试then2')
     })
-    timeline.play();
   </script>
   </div>
 </body>

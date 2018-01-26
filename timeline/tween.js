@@ -166,5 +166,3 @@ const Tween = {
     }
   }
 };
-
-export default Tween

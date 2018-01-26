@@ -1,0 +1,22 @@
+{
+  "name": "learning",
+  "version": "1.0.0",
+  "description": "* 2018-01-14 promise的实现 * 2018-01-23 一个动画缓动函数的简单实现",
+  "main": "promise.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/LuSuguru/lu-learn.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/LuSuguru/lu-learn/issues"
+  },
+  "homepage": "https://github.com/LuSuguru/lu-learn#readme",
+  "dependencies": {
+    "webpack": "^3.10.0"
+  }
+}
