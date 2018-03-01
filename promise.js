@@ -44,6 +44,7 @@ function resolvePromise(promise2, x, resolve, reject) {
   var then
   var thenCalledOrThrow = false
 
+  // 循环调用
   if (promise2 === x) {
     return reject(new TypeError('Chaining cycle detected for promise'))
   }
@@ -103,6 +104,7 @@ Promise1.prototype.then = function (onResolved, onRejected) {
         try {
           var x = onResolved(self.data)
           // 根据x的值决定promise2的状态的函数
+          // resolvePromise(promise2, x, resolve, reject)
           resolvePromise(promise2, x, resolve, reject)
         } catch (e) {
           reject(e) // 如果出错，以捕获到的错误做为promise2的结果
@@ -134,6 +136,7 @@ Promise1.prototype.then = function (onResolved, onRejected) {
         try {
           var x = onResolved(self.data)
           // 根据x的值决定promise2的状态的函数
+          // resolvePromise(promise2, x, resolve, reject)
           resolvePromise(promise2, x, resolve, reject)
         } catch (e) {
           reject(e)
@@ -157,6 +160,20 @@ Promise1.prototype.catch = function (onRejected) {
   return this.then(null, onRejected)
 }
 
+Promise.prototype.finally = function (fn) {
+  // 为什么这里可以呢，因为所有的then调用是一起的，但是这个then里调用fn又异步了一次，所以它总是最后调用的。
+  // 当然这里只能保证在已添加的函数里是最后一次，不过这也是必然。
+  // 不过看起来比其它的实现要简单以及容易理解的多。
+  // 貌似对finally的行为没有一个公认的定义，所以这个实现目前是跟Q保持一致，会返回一个新的Promise而不是原来那个。
+  return this.then(function (v) {
+    setTimeout(fn)
+    return v
+  }, function (r) {
+    setTimeout(fn)
+    throw r
+  })
+}
+
 Promise1.resolve = function (value) {
   var promise = new Promise(function (resolve, reject) {
     resolvePromise(promise, value, resolve, reject)
@@ -170,7 +187,7 @@ Promise1.reject = function (reason) {
   })
 }
 
-Promise.all = function (promises) {
+Promise1.all = function (promises) {
   return new Promise(function (resolve, reject) {
     var resolvedCounter = 0
     var promiseNum = promises.length
@@ -185,7 +202,7 @@ Promise.all = function (promises) {
           if (resolvedCounter === promiseNum) {
             return resolve(resolvedValues)
           }
-          
+
         }, function (reason) {
           return reject(reason)
         })
@@ -194,7 +211,7 @@ Promise.all = function (promises) {
   })
 }
 
-Promise.race = function (promises) {
+Promise1.race = function (promises) {
   return new Promise(function (resolve, reject) {
     for (var i = 0; i < promises.length; i++) {
       Promise.resolve(promises[i]).then(function (value) {

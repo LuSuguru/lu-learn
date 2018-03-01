@@ -12,67 +12,39 @@
       padding: 0;
     }
 
-    #box {
-      height: 200px;
-      background: yellow;
-      /* overflow: hidden; */
-    }
-
-    .middle {
-      width: 100%;
-      height: 200px;
-      background-color: deeppink;
-      float: left;
-    }
-
-    .main {
-      margin-left: 200px;
-      margin-right: 200px;
-    }
+    #box {}
 
     .left {
       width: 200px;
       height: 200px;
+      line-height: 200px;
       background-color: blue;
-      float: left;
-      margin-left: -100%;
+      margin-bottom: 100px;
+    }
+
+    .ceshi {
+      display: inline-block;
+      width: 100px;
+      height: 100px;
+      background: yellow;
+      vertical-align: middle;
     }
 
     .right {
       width: 200px;
       height: 200px;
-      background-color: darkorchid;
       float: left;
-      margin-left: -200px;
-    }
-
-    ul {
-      float: left
-    }
-
-    li {
-      width: 100px;
-      display: inline-block;
+      background-color: darkorchid;
+      margin-top: 100px;
     }
   </style>
 </head>
 
 <body>
   <div id="box">
-    <div class="middle">
-      <div class="main">
-        <ul>
-          <li>测试</li>
-          <li>测试</li>
-          <li>测试</li>
-          <li>测试</li>
-          <li>测试</li>
-          <li>测试</li>
-          <li>测试</li>
-        </ul>
-      </div>
+    <div class="left">
+      <div class="ceshi">1</div>
     </div>
-    <div class="left"></div>
     <div class="right"></div>
   </div>
   <script src="./timeline/tween.js"></script>
@@ -94,15 +66,12 @@
     // timeline.play()
     // console.log(Promise1)
     new Promise1(resolve => {
-      setTimeout(() => {
-        resolve('测试')
-      }, 1000)
+      resolve('测试')
     }).then(res => {
+      // return 1
       return new Promise1(resolve => {
-        setTimeout(() => {
-          console.log('测试‘then1')
-          resolve('测试then1')
-        }, 1000)
+        resolve('测试then1')
+        console.log(1)
       })
     }).then(res => {
       console.log(res)
