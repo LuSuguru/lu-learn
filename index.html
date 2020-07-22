@@ -1,3 +1,10 @@
+<!--
+ * @Date: 2019-06-19 10:37:28
+ * @Author: 芦杰
+ * @Description: Do not edit
+ * @LastEditors: 芦杰
+ * @LastEditTime: 2020-07-09 16:40:19
+-->
 <!DOCTYPE html>
 <html lang="en">
 
@@ -47,29 +54,67 @@
     </div>
     <div class="right"></div>
   </div>
-  <script src="./timeline/tween.js"></script>
-  <script src="./timeline/core.js"></script>
-  <script src="./promise.js"></script>
+  <!-- <script src="./timeline/tween.js"></script>
+  <script src="./timeline/core.js"></script> -->
+  <!-- <script src="./promise.js"></script>
   <script src="./prototype.js"></script>
-  <script src="./closure.js"></script>
+  <script src="./closure.js"></script> -->
+
   <script>
-    // Function.prototype.before = function (beforefn) {
-    //   return (...args) => {
-    //     beforefn.apply(this, args)
+    async function async1() {
+      console.log("async1 start");
+      await async2();
+      console.log("async1 end");
 
-    //     return this.apply(this, args)
-    //   }
-    // }
+    }
+    async function async2() {
+      console.log('async2');
+    }
 
-    // const test = {
-    //   a: 1,
-    //   b() {
-    //     console.log(this)
-    //   }
-    // }
+    console.log("script start");
 
-    // test.b.before(() => { console.log(this) })()
+    setTimeout(function () {
+      console.log("settimeout");
+    }, 0);
+
+    async1();
+
+    new Promise(function (resolve) {
+      console.log("promise1");
+      resolve();
+    }).then(function () {
+      new Promise(function (resolve) {
+        console.log('promise2')
+        resolve()
+      }).then((function () {
+        console.log('promise3')
+      }))
+    }).then((function () {
+      console.log('promise4')
+    }));
+
+    console.log('script end');
+
   </script>
+  <div id="test"></div>
+  <!-- <script>
+    Function.prototype.before = function (beforefn) {
+      return (...args) => {
+        beforefn.apply(this, args)
+
+        return this.apply(this, args)
+      }
+    }
+
+    const test = {
+      a: 1,
+      b() {
+        console.log(this)
+      }
+    }
+
+    test.b.before(function test() { console.log(this) })()
+  </script> -->
   </div>
 </body>
 

@@ -1,3 +1,10 @@
+/**
+ * 实现要点：
+ * 1. 回调函数延迟绑定
+ * 2. 回调返回值穿透
+ * 3. 错误冒泡
+ * @param {*} executor 
+ */
 function Promise1(executor) {
   var self = this
 
@@ -42,6 +49,8 @@ function Promise1(executor) {
 
 function resolvePromise(promise2, x, resolve, reject) {
   var then
+
+  // reject 或者 resolve 其中一个执行过得话，忽略其他的
   var thenCalledOrThrow = false
 
   // 循环调用
@@ -64,14 +73,19 @@ function resolvePromise(promise2, x, resolve, reject) {
 
   if ((x !== null) && ((typeof x === 'object') || (typeof x === 'function'))) {
     try {
+      let then = x.then
+
+      // 如果 then 是函数，调用 x.then
       if (typeof then === 'function') {
         then.call(x, function rs(y) {
           if (thenCalledOrThrow) return
           thenCalledOrThrow = true
+
           return resolvePromise(promise2, y, resolve, reject)
         }, function rj(r) {
           if (thenCalledOrThrow) return
           thenCalledOrThrow = true
+
           return reject(r)
         })
       } else {
@@ -80,6 +94,7 @@ function resolvePromise(promise2, x, resolve, reject) {
     } catch (e) {
       if (thenCalledOrThrow) return
       thenCalledOrThrow = true
+      
       return reject(e)
     }
   } else {
