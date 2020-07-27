@@ -9,7 +9,8 @@ function debounce(func, wait = 50, immediate = true) {
 
     if (!immediate) {
       func.apply(context, args)
-      context = args = null
+      context = null
+      args = null
     }
   }, wait)
 

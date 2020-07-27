@@ -1,7 +1,7 @@
-var path = require('path')
-var webpack = require('webpack')
-var HtmlWebpackPlugin = require('html-webpack-plugin');
-var OpenBrowserPlugin = require('open-browser-webpack-plugin');
+const path = require('path')
+const webpack = require('webpack')
+const HtmlWebpackPlugin = require('html-webpack-plugin')
+const OpenBrowserPlugin = require('open-browser-webpack-plugin')
 
 module.exports = {
   entry: {
@@ -9,8 +9,8 @@ module.exports = {
   },
   output: {
     path: __dirname + '/build',
-    filename: "bundle.js",
-    //添加chunkFilename
+    filename: 'bundle.js',
+    // 添加chunkFilename
     // chunkFilename: '[name].[chunk:5].chunk.js',
   },
 
@@ -28,16 +28,16 @@ module.exports = {
         test: /\.css$/,
         use: ['style-loader', 'css-loader']
       },
-      /*解析css, 并把css添加到html的style标签里*/
-      //{test: /.css$/, use: ExtractTextPlugin.extract({fallback: 'style-loader',use: 'css-loader'})},/*解析css, 并把css变成文件通过link标签引入*/
+      /* 解析css, 并把css添加到html的style标签里 */
+      // {test: /.css$/, use: ExtractTextPlugin.extract({fallback: 'style-loader',use: 'css-loader'})},/*解析css, 并把css变成文件通过link标签引入*/
       {
         test: /\.(jpg|png|gif|svg)$/,
         use: ['url-loader?limit=8192&name=./[name].[ext]']
-      },/*解析图片*/
+      }, /* 解析图片 */
       {
         test: /\.less$/,
         use: ['style-loader', 'css-loader', 'less-loader']
-      }/*解析less, 把less解析成浏览器可以识别的css语言*/
+      }/* 解析less, 把less解析成浏览器可以识别的css语言 */
     ]
   },
   plugins: [
@@ -77,16 +77,16 @@ module.exports = {
   devServer: {
     proxy: {
       '/api': {
-        target: 'http://ticket.xiyoukeji.com/home',  //8092
+        target: 'http://ticket.xiyoukeji.com/home', // 8092
         // target: 'http://192.168.1.168:8888',
         pathRewrite: { '^/api': '' },
         secure: false,
         changeOrigin: true
       }
     },
-    historyApiFallback: true, //不跳转，在开发单页应用时非常有用，它依赖于HTML5 history API，如果设置为true，所有的跳转将指向index.html
-    inline: true, //实时刷新
-    hot: true,  // 使用热加载插件 HotModuleReplacementPlugin
+    historyApiFallback: true, // 不跳转，在开发单页应用时非常有用，它依赖于HTML5 history API，如果设置为true，所有的跳转将指向index.html
+    inline: true, // 实时刷新
+    hot: true, // 使用热加载插件 HotModuleReplacementPlugin
     progress: true
   }
 }

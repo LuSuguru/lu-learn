@@ -7,7 +7,7 @@ const REJECTED = 'rejected'
  * 1. 回调函数延迟绑定
  * 2. 回调返回值穿透
  * 3. 错误冒泡
- * @param {*} callback 
+ * @param {*} callback
  */
 function Promise1(callback) {
   const self = this
@@ -32,7 +32,7 @@ function Promise1(callback) {
       self.status = REJECTED
       self.data = error
 
-      //如果没有错误函数，需要把错误输出到控制台
+      // 如果没有错误函数，需要把错误输出到控制台
       if (self.onRejectedCallback.length === 0) {
         console.error(error)
       }
@@ -68,9 +68,10 @@ function resolvePromise(promise2, x, resolve, reject) {
 
   //  确保不同的 Promise 可以调用
   if ((x !== null) && ((typeof x === 'object') || (typeof x === 'function'))) {
+    let thenCalledOrThrow = false // reject 或者 resolve 其中一个执行过得话，忽略其他的
+
     try {
       const { then } = x
-      let thenCalledOrThrow = false // reject 或者 resolve 其中一个执行过得话，忽略其他的
 
       // 如果 then 是函数，调用 x.then
       if (typeof then === 'function') {
@@ -103,12 +104,12 @@ Promise1.prototype.then = function (onResolved, onRejected) {
   let promise2 = null
 
   // 按照标准，如果then的参数不是Function，则我们需要忽略它，并把值往后传递
-  onResolved = typeof onResolved === 'function' ? onResolved : function (v) { return value }
-  onRejected = typeof onRejected === 'function' ? onRejected : function (r) { return value }
+  onResolved = typeof onResolved === 'function' ? onResolved : function (value) { return value }
+  onRejected = typeof onRejected === 'function' ? onRejected : function (value) { return value }
 
   const generatePromise = (callback) => {
     promise2 = Promise1((resolve, reject) => {
-      // 异步执行 callback 
+      // 异步执行 callback
       setTimeout(() => {
         try {
           const x = callback(this.data)
@@ -123,8 +124,8 @@ Promise1.prototype.then = function (onResolved, onRejected) {
 
   // 如果promise1的状态已经确定并且是resolved，我们调用onResolved
   // 因为考虑到有可能throw，所以我们将其包在try/catch块里
-  if (this.status === Resolve) {
-    generatePromise(onResolove)
+  if (this.status === RESOLOVE) {
+    generatePromise(onResolved)
     return promise2
   }
 
@@ -164,21 +165,16 @@ Promise1.prototype.catch = function (onRejected) {
 }
 
 Promise1.prototype.finally = function (callback) {
-  this.then(value => {
-    return Promise1.resolve(callback()).then(() => {
-      return value;
-    })
-  }, error => {
-    return Promise1.resolve(callback()).then(() => {
-      throw error;
-    })
-  })
+  this.then(value => Promise1.resolve(callback()).then(() => value), error => Promise1.resolve(callback()).then(() => {
+    throw error
+  }))
 }
 
 Promise1.resolve = function (value) {
-  return new Promise1((resolve, reject) => {
+  const promise = new Promise1((resolve, reject) => {
     resolvePromise(promise, value, resolve, reject)
   })
+  return promise
 }
 
 Promise1.reject = function (reason) {
@@ -201,7 +197,6 @@ Promise1.all = function (promises) {
         if (resolvedCounter === promiseNum) {
           return resolve(resolvedValues)
         }
-
       }, (reason) => reject(reason))
     }
   })
@@ -212,8 +207,8 @@ Promise1.race = function (promises) {
     for (let i = 0; i < promises.length; i++) {
       Promise1.resolve(promises[i]).then(
         (value) => resolve(value),
-        (reason) => reject(reason))
+        (reason) => reject(reason)
+      )
     }
   })
 }
-

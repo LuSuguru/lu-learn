@@ -1,5 +1,5 @@
 const getType = obj => Object.prototype.toString.call(obj)
-const isObject = target = typeof target === 'object' || typeof target === 'function'
+const isObject = target => typeof target === 'object' || typeof target === 'function'
 
 const MapTag = '[object Map]'
 const SetTag = '[object Set]'
@@ -44,9 +44,8 @@ function handleFunc(func) {
   if (param) {
     const paramArr = param[0].split(',')
     return new Function(...paramArr, body[0])
-  } else {
-    return new Function(body[0])
   }
+  return new Function(body[0])
 }
 
 function handleNotTraverse(target, tag) {
@@ -79,15 +78,12 @@ function deepClone(target, map = new WeakMap()) {
   }
 
   const type = getType(target)
-  let cloneTarget
 
   if (!canTraverse[type]) {
     return handleNotTraverse(target, type) // 处理不能遍历的对象
-   else {
-      const ctor = target.constructor // 保证对象原型不丢失
-      cloneTarget = new ctor()
-    }
   }
+  const Ctor = target.constructor // 保证对象原型不丢失
+  const cloneTarget = new Ctor()
 
   if (map.get(target)) {
     return map.get(target)

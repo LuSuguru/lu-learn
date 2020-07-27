@@ -1,6 +1,6 @@
 function throttle(func, wait, options = {}) {
   let context = null
-  let arg = null
+  let args = null
   let result = null
   let timeout = null
 
@@ -11,11 +11,14 @@ function throttle(func, wait, options = {}) {
     timeout = null
     result = func.apply(context, args)
 
-    if (!timeout) context = args = null
+    if (!timeout) {
+      context = null
+      args = null
+    }
   }
 
   return function (...params) {
-    const now = date.now()
+    const now = Date.now()
     if (!previousTime && options.leading === false) {
       previousTime = now
     }
@@ -30,10 +33,13 @@ function throttle(func, wait, options = {}) {
         timeout = null
       }
 
-      previous = now
+      previousTime = now
       result = func.apply(context, args)
 
-      if (!timeout) context = args = null
+      if (!timeout) {
+        context = null
+        args = null
+      }
     } else if (!timeout && options.trailing !== false) {
       timeout = setTimeout(later, remaining)
     }

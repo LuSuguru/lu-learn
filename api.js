@@ -6,8 +6,8 @@ Function.prototype.bind = function (context, ...args) {
 
   const self = this
 
-  const fn = function (...arguments) {
-    return self.apply(this instanceof self ? this : context, [...args, ...arguments])
+  const fn = function (...params) {
+    return self.apply(this instanceof self ? this : context, [...args, ...params])
   }
 
   fn.prototype = Object.create(self.prototype)
