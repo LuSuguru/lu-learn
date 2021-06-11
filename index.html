@@ -3,7 +3,7 @@
  * @Author: 芦杰
  * @Description: Do not edit
  * @LastEditors: 芦杰
- * @LastEditTime: 2020-07-09 16:40:19
+ * @LastEditTime: 2021-01-19 09:35:20
 -->
 <!DOCTYPE html>
 <html lang="en">
@@ -19,81 +19,75 @@
       padding: 0;
     }
 
-    #box {}
-
-    .left {
-      width: 200px;
-      height: 200px;
-      line-height: 200px;
-      background-color: blue;
-      margin-bottom: 100px;
+    #box {
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
     }
 
-    .ceshi {
-      display: inline-block;
-      width: 100px;
-      height: 100px;
+    .header {
+      background: red;
+    }
+
+    .main {
       background: yellow;
-      vertical-align: middle;
+      flex-grow: 1;
+      height: 2000px;
     }
 
-    .right {
-      width: 200px;
-      height: 200px;
-      float: left;
-      background-color: darkorchid;
-      margin-top: 100px;
+    .footer {
+      background: blue;
     }
   </style>
 </head>
 
 <body>
   <div id="box">
-    <div class="left">
-      <div class="ceshi">1</div>
-    </div>
-    <div class="right"></div>
+    <div class="header">header</div>
+    <div class="main">main</div>
+    <div class="footer">footer</div>
   </div>
   <!-- <script src="./timeline/tween.js"></script>
   <script src="./timeline/core.js"></script> -->
   <!-- <script src="./promise.js"></script>
   <script src="./prototype.js"></script>
   <script src="./closure.js"></script> -->
+  <script src="./learn-scope.js"></script>
 
   <script>
-    async function async1() {
-      console.log("async1 start");
-      await async2();
-      console.log("async1 end");
+    // async function async1() {
+    //   console.log("async1 start");
+    //   await async2();
+    //   console.log("async1 end");
 
-    }
-    async function async2() {
-      console.log('async2');
-    }
+    // }
+    // async function async2() {
+    //   console.log('async2');
+    // }
 
-    console.log("script start");
+    // console.log("script start");
 
-    setTimeout(function () {
-      console.log("settimeout");
-    }, 0);
+    // setTimeout(function () {
+    //   console.log("settimeout");
+    // }, 0);
 
-    async1();
+    // async1();
 
-    new Promise(function (resolve) {
-      console.log("promise1");
-      resolve();
-    }).then(function () {
-      new Promise(function (resolve) {
-        console.log('promise2')
-        resolve()
-      }).then((function () {
-        console.log('promise3')
-      }))
-    }).then((function () {
-      console.log('promise4')
-    }));
+    // new Promise(function (resolve) {
+    //   console.log("promise1");
+    //   resolve();
+    // }).then(function () {
+    //   new Promise(function (resolve) {
+    //     console.log('promise2')
+    //     resolve()
+    //   }).then((function () {
+    //     console.log('promise3')
+    //   }))
+    // }).then((function () {
+    //   console.log('promise4')
+    // }));
 
-    console.log('script end');
+    // console.log('script end');
 
   </script>
   <div id="test"></div>

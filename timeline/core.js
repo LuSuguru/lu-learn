@@ -20,10 +20,9 @@ function Core(opt) {
 }
 
 Core.prototype._loop = function () {
-
-  const t = Date.now() - this.beginTime,
-    d = this.duration,
-    func = Tween[this.timingFunction || Tween['linear']]
+  const t = Date.now() - this.beginTime
+  const d = this.duration
+  const func = Tween[this.timingFunction || Tween.linear]
 
   if (t >= d) {
     this.state = 'end'
